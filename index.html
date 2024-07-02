@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bonkers Minecraft Server</title>
+    <script>
+        async function fetchMinecraftStatus() {
+            const response = await fetch('minecraft_status.php');
+            const data = await response.json();
+            document.getElementById('players_online').textContent = data.players.online;
+            document.getElementById('players_max').textContent = data.players.max;
+            const playersList = document.getElementById('players_list');
+            playersList.innerHTML = '';
+            if (data.players.list) {
+                data.players.list.forEach(player => {
+                    const li = document.createElement('li');
+                    li.textContent = player;
+                    playersList.appendChild(li);
+                });
+            }
+        }
+
+        window.onload = fetchMinecraftStatus;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>¡Bienvenido!</h1>
+    </header>
+    <main>
+        <p>
+            Este servidor lo creé como un proyecto personal.<br>
+            Actualmente está alojado en una raspberry que tengo.<br>
+            La versión de Minecraft es la 1.21.<br>
+            Y la lista de mods es la siguiente: <a href="https://drive.google.com/drive/folders/1mogJ1-P6WC7mssMz6tGhCDLD28AMm12b">aquí</a>.<br>
+            La dirección es la misma que la IP: <a href="http://bonkers-rasp.duckdns.org">bonkers-rasp.duckdns.org</a>.
+        </p>
+        <h2>Jugadores Conectados</h2>
+        <p>Online: <span id="players_online">0</span>/<span id="players_max">0</span></p>
+        <ul id="players_list"></ul>
+    </main>
+    <iframe src="log_visits.php" style="display:none;"></iframe>
+</body>
+</html>
