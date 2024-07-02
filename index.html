@@ -5,25 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bonkers Minecraft Server</title>
     <link rel="stylesheet" href="styles.css">
-    <script>
-        async function fetchMinecraftStatus() {
-            const response = await fetch('minecraft_status.php');
-            const data = await response.json();
-            document.getElementById('players_online').textContent = data.players.online;
-            document.getElementById('players_max').textContent = data.players.max;
-            const playersList = document.getElementById('players_list');
-            playersList.innerHTML = '';
-            if (data.players.list) {
-                data.players.list.forEach(player => {
-                    const li = document.createElement('li');
-                    li.textContent = player;
-                    playersList.appendChild(li);
-                });
-            }
-        }
-
-        window.onload = fetchMinecraftStatus;
-    </script>
 </head>
 <body>
     <header>
@@ -37,18 +18,43 @@
             Y la lista de mods es la siguiente: <a href="https://drive.google.com/drive/folders/1mogJ1-P6WC7mssMz6tGhCDLD28AMm12b">aquí</a>.<br>
             La dirección es la misma que la IP: <a href="http://bonkers-rasp.duckdns.org">bonkers-rasp.duckdns.org</a>.
         </p>
-
         <h2>Jugadores Conectados</h2>
-        <div class="status">
-            <p>Online: <span id="players_online">0</span>/<span id="players_max">0</span></p>
-            <ul id="players_list"></ul>
+        <div id="status" class="status">
+            Cargando...
         </div>
     </main>
-    <iframe src="log_visits.php" style="display:none;"></iframe>
     <footer>
-        <p>Más información:</p>
-        <a href="https://linktr.ee/Konekt4">Mis redes</a> |
+        <p>Más de Konekt4:</p>
+        <a href="https://linktr.ee/Konekt4">Redes</a> |
+        <a href="https://www.linkedin.com/in/rubén-antonio-waldo-benítez-774826288">LinkedIn</a> |
         <a href="https://ruben-waldo.odoo.com/mi-cv">Sobre mi</a>
     </footer>
+
+    <script>
+        async function fetchMinecraftStatus() {
+            try {
+                const response = await fetch('https://api.mcsrvstat.us/2/bonkers-rasp.duckdns.org');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! Status: ${response.status}`);
+                }
+                const data = await response.json();
+                
+                if (data && data.players && data.players.online !== undefined) {
+                    const statusDiv = document.getElementById('status');
+                    statusDiv.innerHTML = `
+                        <p>Online: ${data.players.online}/${data.players.max}</p>
+                        <ul>${data.players.list ? data.players.list.map(player => `<li>${player}</li>`).join('') : '<li>No hay jugadores conectados</li>'}</ul>
+                    `;
+                } else {
+                    throw new Error('Datos inesperados en la respuesta de la API');
+                }
+            } catch (error) {
+                const statusDiv = document.getElementById('status');
+                statusDiv.innerHTML = `<p>Error al obtener el estado del servidor: ${error.message}</p>`;
+            }
+        }
+
+        fetchMinecraftStatus();
+    </script>
 </body>
 </html>
