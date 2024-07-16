@@ -52,8 +52,10 @@
                 statusDiv.innerHTML = `<p>Error al obtener el estado del servidor: ${error.message}</p>`;
             }
         }
-
+    
+        // Ejecutar fetchMinecraftStatus inmediatamente y luego cada 30 segundos
         fetchMinecraftStatus();
+        setInterval(fetchMinecraftStatus, 30000); // 30000 milisegundos = 30 segundos
     </script>
     
 </body>
