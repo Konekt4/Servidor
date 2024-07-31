@@ -6,7 +6,7 @@ Este repositorio contiene los archivos de la página web de mi servidor personal
 
 - **index.html**: Página principal que muestra los jugadores conectados al servidor de Minecraft.
 - **mapa.html**: Página que redirige a [Chunkbase](https://www.chunkbase.com/apps/seed-map) para visualizar el mapa del servidor.
-- **styles.css**: Hoja de estilos CSS para darle un diseño limpio y moderno a las páginas web.
+- **styles.css**: Hoja de estilos CSS para darle un diseño limpio y moderno a la web.
 
 ## Descripción de Archivos
 
